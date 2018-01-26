@@ -123,13 +123,13 @@ public class ConsoleController {
 				parmChars.Remove(node);
 			}
 			if (!inQuote && node.Value == ' ') {
-				node.Value = '\ n';
+				node.Value = '\n';
 			}
 			node = next;
 		}
 		char[] parmCharsArr = new char[parmChars.Count];
 		parmChars.CopyTo(parmCharsArr, 0);
-		return (new string(parmCharsArr)).Split(new char[] {'\ n'} , StringSplitOptions.RemoveEmptyEntries);
+		return (new string(parmCharsArr)).Split(new char[] {'\n'} , StringSplitOptions.RemoveEmptyEntries);
 	}
 
 	#region Command handlers
