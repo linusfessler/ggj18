@@ -4,13 +4,32 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
+	[SerializeField] float movementSpeed = 1f;
+	[SerializeField] float rotationSpeed = 1f;
+
+	new Rigidbody rigidbody;
+
+	void Start() {
+		rigidbody = GetComponent<Rigidbody>();
+		rigidbody.velocity = movementSpeed * transform.forward;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	void FixedUpdate() {
+		Rotate();
+	}
+
+	void Rotate() {
+		float x = Input.GetAxis("Horizontal");
+		float y = Input.GetAxis("Vertical");
+		float z = Input.GetAxis("Rotation");
+		if (x != 0 || y != 0 || z != 0) {
+			transform.Rotate(rotationSpeed * Time.fixedDeltaTime * new Vector3(-y, x, -z), Space.Self);
+			rigidbody.velocity = rigidbody.velocity.magnitude * transform.forward;
+		}
+	}
+
+	public void AddVelocity(Vector3 velocity) {
+		rigidbody.velocity += velocity;
+		transform.rotation = Quaternion.LookRotation(rigidbody.velocity, transform.up);
 	}
 }
