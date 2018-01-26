@@ -25,12 +25,14 @@ ModelImporter:
     2300006: Cube
     2300008: Cube_001
     2300010: Plane
+    2300012: //RootNode
     3300000: Circle
     3300002: Circle_001
     3300004: Circle_002
     3300006: Cube
     3300008: Cube_001
     3300010: Plane
+    3300012: //RootNode
     4300000: Cube_001
     4300002: Circle_002
     4300004: Circle_001
