@@ -13,7 +13,7 @@ public class Movement : MonoBehaviour {
 
 	void Start() {
 		rigidbody = GetComponentInParent<Rigidbody>();
-		rigidbody.velocity = movementSpeed * transform.forward;
+		ResetVelocity();
 	}
 
 	void FixedUpdate() {
@@ -35,5 +35,9 @@ public class Movement : MonoBehaviour {
 		} else {
 			transform.rotation = Quaternion.RotateTowards(transform.rotation, transform.parent.rotation, rotationOffsetSpeed * Time.fixedDeltaTime);
 		}
+	}
+
+	public void ResetVelocity() {
+		rigidbody.velocity = movementSpeed * transform.forward;
 	}
 }

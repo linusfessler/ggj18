@@ -76,14 +76,14 @@ public class ImageEffect : MonoBehaviour {
         intensity += connectionModifier * Time.deltaTime;
     }
 
-    public void IncreaseConnectionBrust(float amount) {
+    public void IncreaseConnectionBurst(float amount) {
         intensity -= amount;
         if (intensity < 0) intensity = 0;
     }
     public void DecreaseConnectionBrust(float amount)
     {
         intensity += amount;
-        if (intensity > 1) intensity = 0;
+        if (intensity > 1) intensity = 1;
     }
     public void IncreaseConnection(float stabilityPerSecond) {
         connectionModifier = -stabilityPerSecond;

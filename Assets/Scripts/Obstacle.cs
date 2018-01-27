@@ -50,9 +50,13 @@ public class Obstacle : MonoBehaviour {
 	public void Damage() {
 		health -= 1;
 		if (health == 0) {
-			Explosion.Destroy(gameObject, transform.position, explosionScale, vibrationDuration, vibrationIntensity);
+			Explode();
 			obstacles.RemoveObstacle(this);
 		}
+	}
+
+	public void Explode() {
+		Explosion.Destroy(gameObject, transform.position, explosionScale, vibrationDuration, vibrationIntensity);
 	}
 
 	public IEnumerator PopUp() {
