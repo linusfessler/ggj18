@@ -10,8 +10,6 @@ using System.Collections;
 public class ConsoleView : MonoBehaviour {
 	ConsoleController console = new ConsoleController();
 
-	bool didShow = false;
-
 	public GameObject viewContainer; //Container for console view, should be a child of this GameObject
 	public Text logTextArea;
 	public InputField inputField;
@@ -21,7 +19,7 @@ public class ConsoleView : MonoBehaviour {
 			console.logChanged += onLogChanged;
 		}
 		updateLogStr(console.log);
-        inputField.caretWidth = 15;
+        inputField.caretWidth = 10;
 	}
 
 	~ConsoleView() {
@@ -31,6 +29,7 @@ public class ConsoleView : MonoBehaviour {
 	void Update() {
         //activate input field
         inputField.ActivateInputField();
+        console.CheckTask();
     }
 
 	void onLogChanged(string[] newLog) {

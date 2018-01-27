@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour {
 
 	[SerializeField] float speed = 100;
-	[SerializeField] float explosionScale = 0.25f;
+	[SerializeField] float explosionScale = 0.5f;
 	[SerializeField] float vibrationIntensity = 1f;
 	[SerializeField] float vibrationDuration = 0.1f;
 

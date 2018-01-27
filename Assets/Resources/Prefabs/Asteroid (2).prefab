@@ -131,7 +131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vibrationIntensity: 1
   vibrationDuration: 0.25
-  scaleRange: {x: 1, y: 20}
+  scaleRange: {x: 25, y: 50}
 --- !u!136 &136181172225530192
 CapsuleCollider:
   m_ObjectHideFlags: 1

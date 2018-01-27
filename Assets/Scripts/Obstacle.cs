@@ -6,7 +6,7 @@ public class Obstacle : MonoBehaviour {
 
 	[SerializeField] float vibrationIntensity = 1f;
 	[SerializeField] float vibrationDuration = 0.25f;
-	[SerializeField] Vector2 scaleRange = new Vector2(1, 20);
+	[SerializeField] Vector2 scaleRange = new Vector2(10, 100);
 
 	float explosionScale;
 	int health;
@@ -16,16 +16,25 @@ public class Obstacle : MonoBehaviour {
 	void Awake() {
 		float scale = Random.Range(scaleRange.x, scaleRange.y);
 		transform.localScale = scale * Vector3.one;
-		health = (int) scale;
-		explosionScale = scale / 10;
+		health = (int) (scale / 5);
+		explosionScale = scale / 7.5f;
 		obstacles = GetComponentInParent<Obstacles>();
 		rigidbody = GetComponentInParent<Rigidbody>();
+		rigidbody.mass = scale;
+
+		// change color
+		Renderer renderer = GetComponent<Renderer>();
+		Material material = renderer.material;
+		Material copy = new Material(material);
+		HSBColor color = new HSBColor(copy.color);
+		color.b += Random.Range(-0.5f, 0.5f);
+		copy.color = color.ToColor();
+		renderer.material = copy;
 	}
 
 	void Update() {
 		if (obstacles.player && Vector3.Distance(transform.position, obstacles.player.position) > obstacles.maxDistance) {
 			obstacles.RemoveObstacle(this);
-			Destroy(gameObject);
 		}
 		if (rigidbody.velocity.magnitude > obstacles.maxSpeed) {
 			rigidbody.velocity = obstacles.maxSpeed * rigidbody.velocity.normalized;
@@ -38,5 +47,21 @@ public class Obstacle : MonoBehaviour {
 			Explosion.Destroy(gameObject, transform.position, explosionScale, vibrationDuration, vibrationIntensity);
 			obstacles.RemoveObstacle(this);
 		}
+	}
+
+	public IEnumerator PopUp() {
+		Vector3 scale = transform.localScale;
+		Vector3 step = scale / 10f;
+		float scaleSquared = scale.sqrMagnitude;
+		transform.localScale = Vector3.zero;
+		while (transform.localScale.sqrMagnitude < 1.5f * scaleSquared) {
+			transform.localScale += step;
+			yield return new WaitForEndOfFrame();
+		}
+		while (transform.localScale.sqrMagnitude > scaleSquared) {
+			transform.localScale -= step;
+			yield return new WaitForEndOfFrame();
+		}
+		transform.localScale = scale;
 	}
 }
