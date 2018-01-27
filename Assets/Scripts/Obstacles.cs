@@ -16,15 +16,17 @@ public class Obstacles : MonoBehaviour {
 
 	void Awake() {
 		player = movement.transform.parent;
-		maxSpeed = movement.movementSpeed / 2f;
+		maxSpeed = movement.movementSpeed / 5;
 		prefabs = new GameObject[3];
 		for (int i = 0; i < prefabs.Length; i++) {
 			prefabs[i] = Resources.Load<GameObject>("Prefabs/Asteroid (" + (i+1) + ")");
 		}
 	}
 
-	void Start() {
-		InvokeRepeating("SpawnObstacle", 0.1f, 0.1f);
+	void Update() {
+		if (obstacles.Count < maxObstacles) {
+			SpawnObstacle();
+		}
 	}
 
 	void SpawnObstacle() {
@@ -40,12 +42,15 @@ public class Obstacles : MonoBehaviour {
 		GameObject obstacle = GameObject.Instantiate(prefabs[prefabIndex], position, Random.rotationUniform, transform);
 		Rigidbody rigidbody = obstacle.GetComponent<Rigidbody>();
 		rigidbody.velocity = Random.value * maxSpeed * targetDirection;
-		rigidbody.angularVelocity = 5 * Random.value * new Vector3 (Random.Range (-1f, 1f), Random.Range (-1f, 1f), Random.Range (-1f, 1f)).normalized;
+		rigidbody.angularVelocity = 2 * Random.value * new Vector3 (Random.Range (-1f, 1f), Random.Range (-1f, 1f), Random.Range (-1f, 1f)).normalized;
 		obstacles.Add(obstacle.GetComponent<Obstacle>());
+		StartCoroutine(obstacle.GetComponent<Obstacle>().PopUp());
 	}
 
 	public void RemoveObstacle(Obstacle obstacle) {
+		obstacle.StopAllCoroutines();
 		obstacles.Remove(obstacle);
+		Destroy(obstacle.gameObject);
 		SpawnObstacle();
 	}
 }
