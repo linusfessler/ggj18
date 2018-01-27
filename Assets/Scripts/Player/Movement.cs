@@ -10,7 +10,7 @@ public class Movement : MonoBehaviour {
 	new Rigidbody rigidbody;
 
 	void Start() {
-		rigidbody = GetComponent<Rigidbody>();
+		rigidbody = GetComponentInParent<Rigidbody>();
 		rigidbody.velocity = movementSpeed * transform.forward;
 	}
 
@@ -23,13 +23,17 @@ public class Movement : MonoBehaviour {
 		float y = Input.GetAxis("Vertical");
 		float z = Input.GetAxis("Rotation");
 		if (x != 0 || y != 0 || z != 0) {
-			transform.Rotate(rotationSpeed * Time.fixedDeltaTime * new Vector3(-y, x, -z), Space.Self);
+			Quaternion offset = Quaternion.AngleAxis(x, transform.right) * Quaternion.AngleAxis(y, -transform.up) * Quaternion.AngleAxis(z, -transform.forward);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, transform.parent.rotation, rotationSpeed);
+			transform.parent.Rotate(rotationSpeed * Time.fixedDeltaTime * new Vector3(-y, x, -z), Space.Self);
 			rigidbody.velocity = rigidbody.velocity.magnitude * transform.forward;
+		} else {
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, transform.parent.rotation, rotationSpeed * Time.fixedDeltaTime);
 		}
 	}
 
 	public void AddVelocity(Vector3 velocity) {
 		rigidbody.velocity += velocity;
-		transform.rotation = Quaternion.LookRotation(rigidbody.velocity, transform.up);
+		transform.parent.rotation = Quaternion.LookRotation(rigidbody.velocity, transform.up);
 	}
 }
