@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour {
 
-	[SerializeField] float movementSpeed = 1f;
-	[SerializeField] float rotationSpeed = 1f;
+	[SerializeField] public float movementSpeed = 10f;
+	[SerializeField] float rotationSpeed = 100f;
 	[SerializeField] float rotationOffsetDegrees = 5;
 	[SerializeField] float rotationOffsetSpeed = 2.5f;
 
@@ -35,12 +35,5 @@ public class Movement : MonoBehaviour {
 		} else {
 			transform.rotation = Quaternion.RotateTowards(transform.rotation, transform.parent.rotation, rotationOffsetSpeed * Time.fixedDeltaTime);
 		}
-	}
-
-	public void AddVelocity(Vector3 velocity) {
-		rigidbody.velocity += velocity;
-		Vector3 up = Vector3.Cross(transform.parent.forward, velocity);
-		//transform.parent.Rotate(rotationSpeed * Time.fixedDeltaTime * velocity, Space.Self);
-		transform.parent.rotation = Quaternion.LookRotation(rigidbody.velocity, transform.parent.up);
 	}
 }
