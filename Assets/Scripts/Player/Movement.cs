@@ -27,7 +27,7 @@ public class Movement : MonoBehaviour {
 		if (x != 0 || y != 0 || z != 0) {
 			Quaternion offsetFromParent = Quaternion.identity;
 			offsetFromParent *= Quaternion.AngleAxis(rotationOffsetDegrees * y, transform.parent.right);
-			offsetFromParent *= Quaternion.AngleAxis(rotationOffsetDegrees * x, transform.parent.up);
+			offsetFromParent *= Quaternion.AngleAxis(rotationOffsetDegrees * x, transform.parent.up) * Quaternion.AngleAxis(rotationOffsetDegrees * x, -transform.parent.forward);
 			offsetFromParent *= Quaternion.AngleAxis(rotationOffsetDegrees * z, -transform.parent.forward);
 			transform.rotation = Quaternion.RotateTowards(transform.rotation, offsetFromParent * transform.parent.rotation, rotationOffsetSpeed * Time.fixedDeltaTime);
 			transform.parent.Rotate(rotationSpeed * Time.fixedDeltaTime * new Vector3(y, x, -z), Space.Self);

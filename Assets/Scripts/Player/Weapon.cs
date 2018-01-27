@@ -12,7 +12,7 @@ public class Weapon : MonoBehaviour {
 	public void Fire() {
 		if (canFire) {
 			GameObject projectile = GameObject.Instantiate(this.projectile.gameObject, transform.position, transform.rotation);
-			projectile.GetComponent<Projectile>().Shoot();
+			projectile.GetComponent<Projectile>().Shoot(projectile.transform.forward);
 			StartCoroutine(Cooldown());
 		}
 	}
