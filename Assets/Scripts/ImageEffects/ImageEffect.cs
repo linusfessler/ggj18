@@ -21,10 +21,6 @@ public class ImageEffect : MonoBehaviour {
 
     private void OnRenderImage(RenderTexture src, RenderTexture dst)
     {
-        tempTex1 = new RenderTexture(src.width, src.height, 16, RenderTextureFormat.ARGB32);
-        tempTex1.Create();
-        tempTex2 = new RenderTexture(src.width, src.height, 16, RenderTextureFormat.ARGB32);
-        tempTex2.Create();
         Graphics.Blit(src, tempTex1, ColorShift);
         Graphics.Blit(tempTex1, tempTex2, BlockDistort);
         Graphics.Blit(tempTex2, tempTex1, BlackOut);
@@ -35,6 +31,11 @@ public class ImageEffect : MonoBehaviour {
     private void Start()
     {
         lastFrameIntensity = intensity;
+        Camera cam = GetComponent<Camera>();
+        tempTex1 = new RenderTexture(cam.pixelWidth, cam.pixelWidth, 16, RenderTextureFormat.ARGB32);
+        tempTex1.Create();
+        tempTex2 = new RenderTexture(cam.pixelWidth, cam.pixelWidth, 16, RenderTextureFormat.ARGB32);
+        tempTex2.Create();
     }
 
     private void Update()
