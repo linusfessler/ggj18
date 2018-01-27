@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33332679764981990}
   - component: {fileID: 23903286434650400}
   - component: {fileID: 95158868873406596}
+  - component: {fileID: 136692736302541456}
   m_Layer: 0
   m_Name: ast3
   m_TagString: Untagged
@@ -100,3 +101,16 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!136 &136692736302541456
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1432854321788424}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.8884243
+  m_Height: 1.546078
+  m_Direction: 1
+  m_Center: {x: 0.18932006, y: 0.109185025, z: 0.46109858}
