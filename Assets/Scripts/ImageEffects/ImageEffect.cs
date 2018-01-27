@@ -70,20 +70,21 @@ public class ImageEffect : MonoBehaviour {
         } 
     }
 
+	void SetIntensity(float intensity) {
+		this.intensity = Mathf.Clamp (intensity, 0, 1);
+	}
 
     #region Connection modification
     private void UpdateConnection() {
-        intensity += connectionModifier * Time.deltaTime;
+		SetIntensity(intensity + connectionModifier * Time.deltaTime);
     }
 
     public void IncreaseConnectionBurst(float amount) {
-        intensity -= amount;
-        if (intensity < 0) intensity = 0;
+		SetIntensity (intensity - amount);
     }
     public void DecreaseConnectionBrust(float amount)
-    {
-        intensity += amount;
-        if (intensity > 1) intensity = 1;
+	{
+		SetIntensity (intensity + amount);
     }
     public void IncreaseConnection(float stabilityPerSecond) {
         connectionModifier = -stabilityPerSecond;

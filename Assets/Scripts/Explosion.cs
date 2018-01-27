@@ -17,7 +17,7 @@ public class Explosion : MonoBehaviour {
 		GameObject prefab = Resources.Load<GameObject>("Prefabs/Explosion");
 		GameObject explosion = GameObject.Instantiate(prefab, position, Random.rotationUniform);
 		explosion.transform.localScale = scale * Vector3.one;
-		explosion.GetComponent<MonoBehaviour>().StartCoroutine(Vibration.Vibrate(vibrationDuration, vibrationIntensity));
+		Camera.main.GetComponent<MonoBehaviour>().StartCoroutine(Vibration.Vibrate(vibrationDuration, vibrationIntensity));
 		Destroy(gameObject);
 	}
 }

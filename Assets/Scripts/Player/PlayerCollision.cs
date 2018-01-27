@@ -21,7 +21,7 @@ public class PlayerCollision : MonoBehaviour {
 		if (obstacle) {
 			obstacle.Explode();
 			movement.ResetVelocity();
-			imageEffect.DecreaseConnectionBrust(0.5f);
+			imageEffect.DecreaseConnectionBrust(0.25f);
 			if (imageEffect.intensity >= 1) {
 				Explode();
 			}

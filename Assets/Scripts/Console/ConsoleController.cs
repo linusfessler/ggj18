@@ -40,7 +40,7 @@ public class ConsoleController{
 	/// How many log lines should be retained?
 	/// Note that strings submitted to appendLogLine with embedded newlines will be counted as a single line.
 	/// </summary>
-	const int scrollbackSize = 20;
+	const int scrollbackSize = 100;
 
 	Queue<string> scrollback = new Queue<string>(scrollbackSize);
 	List<string> commandHistory = new List<string>();
@@ -55,6 +55,9 @@ public class ConsoleController{
 	private bool taskCompleted = true;
     private string activeTask = "";
     private float nextTaskTime = 0f;
+
+	private ImageEffect glitchEffect;
+	private float glitchRate = 0.02f;
 
 	public string[] log { get; private set; } //Copy of scrollback as an array for easier use by ConsoleView
 
@@ -151,6 +154,8 @@ public class ConsoleController{
     }
 
     private void CreatenewTask() {
+		glitchEffect.DecreaseConnection (glitchRate);
+		glitchRate += 0.005f;
         int taskid = UnityEngine.Random.Range(0, 4);
         switch (taskid) {
             case 0:
@@ -165,10 +170,11 @@ public class ConsoleController{
                 CreateAdjustTask();
                 taskCompleted = false;
                 break;
-            case 3:
-                CreateAllocateTask();
-                taskCompleted = false;
-                break;
+		case 3:
+			CreateAllocateTask ();
+			taskCompleted = false;
+			break;
+
         }
     }
 
@@ -176,6 +182,8 @@ public class ConsoleController{
     {
         taskCompleted = true;
         nextTaskTime = Time.time + 2f;
+		glitchEffect.StabilizeConnection ();
+		glitchEffect.IncreaseConnectionBurst (0.35f);
     }
 
     #region individual tasks
@@ -433,4 +441,8 @@ public class ConsoleController{
 		PlayerPrefs.Save();
 	}
     #endregion
+
+	public void AssignImageEffect(ImageEffect effect){
+		glitchEffect = effect;
+	}
 }
