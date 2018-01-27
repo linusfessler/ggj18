@@ -206,9 +206,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b0255694cde7554e97817459efb6c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  intensity: 0
+  intensity: 0.19
   ColorShift: {fileID: 2100000, guid: 7923cac291799e84bb96cee8f24abe29, type: 2}
   BlockDistort: {fileID: 2100000, guid: c8fca749adac2f34dadec4bfbf0d0c2b, type: 2}
+  CrtLines: {fileID: 2100000, guid: 882e674c0a7bb1e4b85888560550acb5, type: 2}
+  Noise: {fileID: 2100000, guid: c3dd5f4e0a073e84ea20d7c426aa4106, type: 2}
+  BlackOut: {fileID: 2100000, guid: 2dd8ee3324bb4fc4e93709e9aa224374, type: 2}
 --- !u!1 &1779511282
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: ColorShift
-  m_Shader: {fileID: 4800000, guid: a4de78bee0c7c7c40a8c32be6e1f1754, type: 3}
+  m_Name: CrtLines
+  m_Shader: {fileID: 4800000, guid: 376b6b307f0a40545b064d4d98519936, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -18,12 +18,12 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _ArtifactNoise:
-        m_Texture: {fileID: 2800000, guid: ccd493aef7e94524693665b62f1f9f9a, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _BumpMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CrtLines:
+        m_Texture: {fileID: 2800000, guid: 06c455860f2296141abe30b07bce598e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -66,7 +66,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Intensity: 0.0095
+    - _Intensity: 0.19
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
