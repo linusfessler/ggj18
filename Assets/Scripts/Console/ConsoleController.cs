@@ -10,7 +10,7 @@ using System.Text;
 
 public delegate void CommandHandler(string[] args);
 
-public class ConsoleController {
+public class ConsoleController{
 
 	#region Event declarations
 	// Used to communicate with ConsoleView
@@ -46,15 +46,20 @@ public class ConsoleController {
 	List<string> commandHistory = new List<string>();
 	Dictionary<string, CommandRegistration> commands = new Dictionary<string, CommandRegistration>();
 
+    public float firmwareVersion = 1.3f;
+    public string instableAxis = "Z";
+    public int coreTemp = 90;
+
 	public string[] log { get; private set; } //Copy of scrollback as an array for easier use by ConsoleView
 
 	const string repeatCmdName = "!!"; //Name of the repeat command, constant since it needs to skip these if they are in the command history
 
 	public ConsoleController() {
-		//When adding commands, you must add a call below to registerCommand() with its name, implementation method, and help text.
-		registerCommand("babble", babble, "Example command that demonstrates how to parse arguments. babble [word] [# of times to repeat]");
-		registerCommand("echo", echo, "echoes arguments back as array (for testing argument parser)");
-		registerCommand("help", help, "Print this help.");
+        //When adding commands, you must add a call below to registerCommand() with its name, implementation method, and help text.
+        registerCommand("help", help, "Print this help.");
+        registerCommand("update", updateFirmware, "\nupdate [version number] \nupdates current  firmware.\n");
+		registerCommand("calibrate", calibrateSender, "\ncalibrate [axis]\nrecalibrates rotation of transmission satellite.\n");
+		registerCommand("energy", adjustEnergy,"\nenergy [operation] [amount].");
 		registerCommand("hide", hide, "Hide the console.");
 		registerCommand(repeatCmdName, repeatCommand, "Repeat last command.");
 		registerCommand("reload", reload, "Reload game.");
@@ -80,6 +85,7 @@ public class ConsoleController {
 	}
 
 	public void runCommandString(string commandString) {
+        appendLogLine("\n...\n");
 		appendLogLine("$ " + commandString);
 
 		string[] commandSplit = parseArguments(commandString);
@@ -132,48 +138,112 @@ public class ConsoleController {
 		return (new string(parmCharsArr)).Split(new char[] {'\n'} , StringSplitOptions.RemoveEmptyEntries);
 	}
 
-	#region Command handlers
-	//Implement new commands in this region of the file.
+    #region Command handlers
+    //Implement new commands in this region of the file.
 
-	/// <summary>
-	/// A test command to demonstrate argument checking/parsing.
-	/// Will repeat the given word a specified number of times.
-	/// </summary>
-	void babble(string[] args) {
-		if (args.Length < 2) {
-			appendLogLine("Expected 2 arguments.");
+    /// <summary>
+    /// A test command to demonstrate argument checking/parsing.
+    /// Will repeat the given word a specified number of times.
+    /// </summary>
+
+
+    void help(string[] args)
+    {
+        foreach (CommandRegistration reg in commands.Values)
+        {
+            appendLogLine(string.Format("{0}: {1}", reg.command, reg.help));
+        }
+    }
+    void updateFirmware(string[] args) {
+		if (args.Length < 1) {
+            appendLogLine("Expected 1 argument.\nupdate [version number]\ncurrent version: " + firmwareVersion.ToString());
 			return;
 		}
-		string text = args[0];
-		if (string.IsNullOrEmpty(text)) {
-			appendLogLine("Expected arg1 to be text.");
-		}  else {
-			int repeat = 0;
-			if (!Int32.TryParse(args[1], out repeat)) {
-				appendLogLine("Expected an integer for arg2.");
-			}  else {
-				for(int i = 0; i < repeat; ++i) {
-					appendLogLine(string.Format("{0} {1}", text, i));
-				}
-			}
-		}
+
+        double firmwareInput = 0;
+        if (double.TryParse(args[0], out firmwareInput))
+        {
+            if (firmwareInput > firmwareVersion)
+            {
+                appendLogLine("firmware update to version " + firmwareInput.ToString() + " succesful");
+            }
+            else {
+                appendLogLine("version " + firmwareInput.ToString() + " outdated. cannot downgrade.");
+            }
+            
+        }
+        else
+        {
+            appendLogLine(args[0]  + " is not a valid firmware");
+        }
 	}
 
-	void echo(string[] args) {
-		StringBuilder sb = new StringBuilder();
-		foreach (string arg in args)
-		{
-			sb.AppendFormat("{0},", arg);
-		}
-		sb.Remove(sb.Length - 1, 1);
-		appendLogLine(sb.ToString());
-	}
+	void calibrateSender(string[] args) {
+        if (args.Length < 1)
+        {
+            appendLogLine("Expected 1 argument.\ncalibrate [axis] (x, y, z)");
+            return;
+        }
+        string inputaxis = args[0];
+        if ((inputaxis == "x")|| (inputaxis == "y")|| (inputaxis == "z"))
+        {
+            if (inputaxis.ToUpper() == instableAxis.ToUpper())
+            {
+                appendLogLine(inputaxis + " axis sucessfully recalibrated");
+            }
+            else
+            {
+                appendLogLine(inputaxis + " axis does not need to be calibrated");
+            }
 
-	void help(string[] args) {
-		foreach(CommandRegistration reg in commands.Values) {
-			appendLogLine(string.Format("{0}: {1}", reg.command, reg.help));
-		}
-	}
+        }
+        else
+        {
+            appendLogLine(args[0] + " is not a valid axis");
+        }
+    }
+
+	void adjustEnergy(string[] args) {
+        if (args.Length < 2)
+        {
+            LogTemp();
+            appendLogLine("Expected 2 arguments.\nenergy [operation] (dec, inc) [amount].");
+            return;
+        }
+        string operation = args[0];
+        if ((operation == "dec") || (operation == "inc"))
+        {
+            int amount;
+            if (int.TryParse(args[1], out amount))
+            {
+                int i = operation == "dec" ? -1 : 1;
+
+                if (coreTemp + amount * i == 100)
+                {
+                    appendLogLine("energy succesfully adjusted.");
+                }
+                else {
+                    LogTemp();
+                    appendLogLine("operation not recommended");
+                }
+            }
+            else
+            {
+                LogTemp();
+                appendLogLine(amount.ToString() + " is not a valid amount.");
+            }
+
+        }
+        else
+        {
+            LogTemp();
+            appendLogLine(args[0] + " is not a valid command");
+        }
+    }
+
+    void LogTemp() {
+        appendLogLine("energy core temperature: " + coreTemp.ToString() + "\nrecommended temperature: 100");
+    }
 
 	void hide(string[] args) {
 		if (visibilityChanged != null) {
@@ -200,6 +270,5 @@ public class ConsoleController {
 		PlayerPrefs.DeleteAll();
 		PlayerPrefs.Save();
 	}
-
-	#endregion
+    #endregion
 }

@@ -21,8 +21,7 @@ public class ConsoleView : MonoBehaviour {
 			console.logChanged += onLogChanged;
 		}
 		updateLogStr(console.log);
-
-        
+        inputField.caretWidth = 15;
 	}
 
 	~ConsoleView() {
