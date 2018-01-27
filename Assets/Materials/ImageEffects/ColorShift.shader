@@ -52,15 +52,16 @@
 				noiseuv % 1;
 				float4 stripNoise = tex2D(_ArtifactNoise,noiseuv);
 				stripNoise = ((stripNoise * 2) - 1) * _Intensity;
+				float2 modifier = float2(1.5,0.8);
 
 				//sample red
-				float2 texelSample = (i.uv + stripNoise.rg) % 1;
+				float2 texelSample = (i.uv + stripNoise.rg * modifier) % 1;
 				float red = tex2D(_MainTex, texelSample).r;
 				//sample green
-				texelSample = (i.uv + stripNoise.gb) % 1;
+				texelSample = (i.uv + stripNoise.gb * modifier) % 1;
 				float green = tex2D(_MainTex, texelSample).g;
 				//sample blue
-				texelSample = (i.uv + stripNoise.br) % 1;
+				texelSample = (i.uv + stripNoise.br * modifier) % 1;
 				float blue = tex2D(_MainTex, texelSample).b ;
 				
 				fixed4 col = tex2D(_MainTex, i.uv);

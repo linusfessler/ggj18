@@ -206,8 +206,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b0255694cde7554e97817459efb6c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EffectMaterial: {fileID: 2100000, guid: 7923cac291799e84bb96cee8f24abe29, type: 2}
+  intensity: 0.19
+  ColorShift: {fileID: 2100000, guid: 7923cac291799e84bb96cee8f24abe29, type: 2}
   BlockDistort: {fileID: 2100000, guid: c8fca749adac2f34dadec4bfbf0d0c2b, type: 2}
+  CrtLines: {fileID: 2100000, guid: 882e674c0a7bb1e4b85888560550acb5, type: 2}
+  Noise: {fileID: 2100000, guid: c3dd5f4e0a073e84ea20d7c426aa4106, type: 2}
+  BlackOut: {fileID: 2100000, guid: 2dd8ee3324bb4fc4e93709e9aa224374, type: 2}
 --- !u!1 &1779511282
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,8 +279,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1779511282}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.048, y: 0.848, z: 0}
-  m_LocalScale: {x: 2.5142362, y: 2.0654056, z: 1.657378}
+  m_LocalPosition: {x: 0.23, y: 0.08, z: 0}
+  m_LocalScale: {x: 3.2335083, y: 2.6312704, z: 1.9154562}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
