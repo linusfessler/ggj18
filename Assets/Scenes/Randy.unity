@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 110194265}
   - component: {fileID: 110194264}
   - component: {fileID: 110194263}
+  - component: {fileID: 110194267}
   m_Layer: 0
   m_Name: Console Camera
   m_TagString: MainCamera
@@ -194,6 +195,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &110194267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 110194262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b0255694cde7554e97817459efb6c17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  intensity: 0.507
+  ColorShift: {fileID: 0}
+  BlockDistort: {fileID: 0}
+  CrtLines: {fileID: 2100000, guid: 882e674c0a7bb1e4b85888560550acb5, type: 2}
+  Noise: {fileID: 2100000, guid: c3dd5f4e0a073e84ea20d7c426aa4106, type: 2}
+  BlackOut: {fileID: 0}
 --- !u!1 &187795126
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,7 +336,7 @@ MonoBehaviour:
     m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -802,7 +820,7 @@ GameObject:
   - component: {fileID: 1464047901}
   - component: {fileID: 1464047900}
   - component: {fileID: 1464047899}
-  - component: {fileID: 1464047898}
+  - component: {fileID: 1464047902}
   m_Layer: 0
   m_Name: Game Camera
   m_TagString: MainCamera
@@ -810,13 +828,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1464047898
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1464047897}
-  m_Enabled: 1
 --- !u!124 &1464047899
 Behaviour:
   m_ObjectHideFlags: 0
@@ -873,6 +884,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1464047902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1464047897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b0255694cde7554e97817459efb6c17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  intensity: 0.522
+  ColorShift: {fileID: 2100000, guid: 7923cac291799e84bb96cee8f24abe29, type: 2}
+  BlockDistort: {fileID: 2100000, guid: c8fca749adac2f34dadec4bfbf0d0c2b, type: 2}
+  CrtLines: {fileID: 2100000, guid: 882e674c0a7bb1e4b85888560550acb5, type: 2}
+  Noise: {fileID: 2100000, guid: c3dd5f4e0a073e84ea20d7c426aa4106, type: 2}
+  BlackOut: {fileID: 2100000, guid: 2dd8ee3324bb4fc4e93709e9aa224374, type: 2}
 --- !u!1 &1781676711
 GameObject:
   m_ObjectHideFlags: 0
