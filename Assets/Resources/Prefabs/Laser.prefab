@@ -38,7 +38,7 @@ Transform:
   m_GameObject: {fileID: 1162522094106122}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 10}
+  m_LocalScale: {x: 1, y: 1, z: 8}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -82,6 +82,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 100
+  explosion: {fileID: 114428039195141964, guid: fc9a0083f9e2fbf498cc9bbc5d9db4a5,
+    type: 2}
+  scale: 0.1
+  vibrationStrength: 1
+  vibrationDuration: 0.1
 --- !u!120 &120586610804236374
 LineRenderer:
   m_ObjectHideFlags: 1

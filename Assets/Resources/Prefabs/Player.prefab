@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 4553225548727684}
   - component: {fileID: 54966678584108138}
   - component: {fileID: 65396622949855808}
+  - component: {fileID: 114541911000252370}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -682,8 +683,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 2.89}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 0.52, z: 1.99}
+  m_Center: {x: 0, y: 0.07, z: 0.24}
 --- !u!81 &81897113924071258
 AudioListener:
   m_ObjectHideFlags: 1
@@ -1090,9 +1091,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b0255694cde7554e97817459efb6c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  intensity: 0
+  intensity: 0.452
   ColorShift: {fileID: 2100000, guid: 7923cac291799e84bb96cee8f24abe29, type: 2}
   BlockDistort: {fileID: 2100000, guid: c8fca749adac2f34dadec4bfbf0d0c2b, type: 2}
+  CrtLines: {fileID: 2100000, guid: 882e674c0a7bb1e4b85888560550acb5, type: 2}
+  Noise: {fileID: 2100000, guid: c3dd5f4e0a073e84ea20d7c426aa4106, type: 2}
+  BlackOut: {fileID: 2100000, guid: 2dd8ee3324bb4fc4e93709e9aa224374, type: 2}
 --- !u!114 &114310039373228950
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1107,6 +1111,20 @@ MonoBehaviour:
   projectile: {fileID: 114397133287733196, guid: c51173bd8d9b84440bb193dee14e3b6e,
     type: 2}
   cooldown: 0.5
+--- !u!114 &114541911000252370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1564363827840522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7501a020677eddd48bf355a192ef2e64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionScale: 0.35
+  vibrationIntensity: 1
+  vibrationDuration: 1
 --- !u!114 &114581796253498086
 MonoBehaviour:
   m_ObjectHideFlags: 1
