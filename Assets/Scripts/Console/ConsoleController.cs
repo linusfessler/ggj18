@@ -49,7 +49,12 @@ public class ConsoleController{
     public float firmwareVersion = 1.3f;
     public string instableAxis = "Z";
     public int coreTemp = 90;
-	public bool successful = false;
+    public int memorynumber;
+    public string memoryHash;
+
+	private bool taskCompleted = true;
+    private string activeTask = "";
+    private float nextTaskTime = 0f;
 
 	public string[] log { get; private set; } //Copy of scrollback as an array for easier use by ConsoleView
 
@@ -61,8 +66,8 @@ public class ConsoleController{
 		registerCommand("update", updateFirmware, "\ntype 'update [version number]' \nto update current  firmware.\n");
 		registerCommand("calibrate", calibrateSender, "\ntype 'calibrate [axis]'\nto recalibrate rotation of transmission satellite.\n");
 		registerCommand("energy", adjustEnergy,"\ntype 'energy [operation] [amount]'\nto adjust energy temperature.\n");
-		/*registerCommand("hide", hide, "Hide the console.");
-		registerCommand(repeatCmdName, repeatCommand, "Repeat last command.");
+		registerCommand("allocate", allocate, "\nallocate number from fragmented memory.\n");
+		/*registerCommand(repeatCmdName, repeatCommand, "Repeat last command.");
 		registerCommand("reload", reload, "Reload game.");
 		registerCommand("resetprefs", resetPrefs, "Reset & saves PlayerPrefs.");*/
 	}
@@ -72,8 +77,6 @@ public class ConsoleController{
 	}
 
 	public void appendLogLine(string line) {
-		Debug.Log(line);
-
 		if (scrollback.Count >= ConsoleController.scrollbackSize) {
 			scrollback.Dequeue();
 		}
@@ -139,6 +142,108 @@ public class ConsoleController{
 		return (new string(parmCharsArr)).Split(new char[] {'\n'} , StringSplitOptions.RemoveEmptyEntries);
 	}
 
+    #region task generation
+
+    public void CheckTask() {
+        if (taskCompleted && Time.time > nextTaskTime) {
+            CreatenewTask();
+        }
+    }
+
+    private void CreatenewTask() {
+        int taskid = UnityEngine.Random.Range(0, 4);
+        switch (taskid) {
+            case 0:
+                CreateUpdateTask();
+                taskCompleted = false;
+                break;
+            case 1:
+                CreateCalibrateTask();
+                taskCompleted = false;
+                break;
+            case 2:
+                CreateAdjustTask();
+                taskCompleted = false;
+                break;
+            case 3:
+                CreateAllocateTask();
+                taskCompleted = false;
+                break;
+        }
+    }
+
+    private void CompleteTask()
+    {
+        taskCompleted = true;
+        nextTaskTime = Time.time + 2f;
+    }
+
+    #region individual tasks
+    private void CreateUpdateTask() {
+        appendLogLine("\n...\n\n<color=red>transmission protocol outdated!</color>\ncurrent firmware: " + firmwareVersion.ToString());
+        activeTask = "update";
+    }
+    private void CreateCalibrateTask() {
+        coreTemp = 1000 + UnityEngine.Random.Range(-100, 100) * 10;
+        coreTemp = coreTemp == 1000 ? 770 : coreTemp;
+        appendLogLine("\n...\n\n<color=red>energy core temperature critical!</color>\ncurrent core temperature: " + coreTemp.ToString() + "°C\nrecommended temperature: 1000°C");
+        activeTask = "energy";
+    }
+    private void CreateAdjustTask()
+    {
+        int x = UnityEngine.Random.Range(50, 100);
+        int y = UnityEngine.Random.Range(50, 100);
+        int z = UnityEngine.Random.Range(50, 100);
+
+        if (x < y && x < z)
+        {
+            //itsx
+            instableAxis = "x";
+        }
+        else if (y < z)
+        {
+            //its y
+            instableAxis = "y";
+        }
+        else {
+            //its z
+            instableAxis = "z";
+        }
+        appendLogLine("\n...\n\n<color=red>connection instable!</color>\ndrone is leaving sending range of satellite.\n" +
+            "signal strength x: " + x.ToString() +"%\n" +
+            "signal strength y: " + y.ToString() + "%\n" +
+            "signal strength z: " + z.ToString() + "%");
+        activeTask = "calibrate";
+    }
+    private void CreateAllocateTask()
+    {
+        appendLogLine("\n...\n\n<color=red>memory data corrupted!</color>\nallocate number from hash");
+        //string sonderzeichen = "!#$%&()?@[]^_{}~";
+        string sonderzeichen = ",:></='¨}´+-*_°!#$%&()?@[]^_{}~";
+        string memory = "";
+        int number = UnityEngine.Random.Range(10000, 100000);
+        for (int y = 0; y< 5; y++) {
+            memory += "\n";
+            int pos = UnityEngine.Random.Range(0, 9);
+            for (int x = 0; x < 10; x++)
+            {
+                memory += x == pos ? number.ToString()[y] : sonderzeichen[UnityEngine.Random.Range(0, sonderzeichen.Length)];
+            }
+        }
+        appendLogLine(memory);
+        activeTask = "allocate";
+        memorynumber = number;
+        memoryHash = memory;
+    }
+    #endregion
+
+
+    private bool IsTaskActive(string task) {
+        return (task == activeTask);
+    }
+
+    #endregion
+
     #region Command handlers
     //Implement new commands in this region of the file.
 
@@ -161,16 +266,24 @@ public class ConsoleController{
 			return;
 		}
 
-        double firmwareInput = 0;
-        if (double.TryParse(args[0], out firmwareInput))
+        float firmwareInput = 0;
+        if (float.TryParse(args[0], out firmwareInput))
         {
-            if (firmwareInput > firmwareVersion)
+            if (IsTaskActive("update"))
             {
-				appendLogLine ("firmware update to version " + firmwareInput.ToString () + " successful.");
-				successful = true;
+                if (firmwareInput > firmwareVersion)
+                {
+                    firmwareVersion = firmwareInput;
+                    appendLogLine("firmware update to version " + firmwareInput.ToString() + " successful.");
+                    CompleteTask();
+                }
+                else
+                {
+                    appendLogLine("version " + firmwareInput.ToString() + " outdated. cannot downgrade.");
+                }
             }
             else {
-                appendLogLine("version " + firmwareInput.ToString() + " outdated. cannot downgrade.");
+                appendLogLine("firmware is up to date.");
             }
             
         }
@@ -189,13 +302,21 @@ public class ConsoleController{
         string inputaxis = args[0];
         if ((inputaxis == "x")|| (inputaxis == "y")|| (inputaxis == "z"))
         {
-            if (inputaxis.ToUpper() == instableAxis.ToUpper())
+            if (IsTaskActive("calibrate"))
             {
-                appendLogLine(inputaxis + " axis sucessfully recalibrated.");
+
+                if (inputaxis.ToUpper() == instableAxis.ToUpper())
+                {
+                    appendLogLine(inputaxis + " axis sucessfully recalibrated.");
+                    CompleteTask();
+                }
+                else
+                {
+                    appendLogLine(inputaxis + " axis does not need to be calibrated.");
+                }
             }
-            else
-            {
-                appendLogLine(inputaxis + " axis does not need to be calibrated");
+            else {
+                appendLogLine("signal is already stable.");
             }
 
         }
@@ -218,15 +339,23 @@ public class ConsoleController{
             int amount;
             if (int.TryParse(args[1], out amount))
             {
-                int i = operation == "dec" ? -1 : 1;
-
-                if (coreTemp + amount * i == 100)
+                if (IsTaskActive("energy"))
                 {
-                    appendLogLine("energy successfully adjusted.");
+                    int i = operation == "dec" ? -1 : 1;
+
+                    if (coreTemp + amount * i == 1000)
+                    {
+                        appendLogLine("energy successfully adjusted.");
+                        CompleteTask();
+                    }
+                    else
+                    {
+                        LogTemp();
+                        appendLogLine("operation not recommended!");
+                    }
                 }
                 else {
-                    LogTemp();
-                    appendLogLine("operation not recommended");
+                    appendLogLine("core temperature is stable.");
                 }
             }
             else
@@ -243,8 +372,43 @@ public class ConsoleController{
         }
     }
 
-    void LogTemp() {
-        appendLogLine("energy core temperature: " + coreTemp.ToString() + "\nrecommended temperature: 100");
+    void allocate(string[] args)
+    {
+        if (args.Length < 1)
+        {
+            appendLogLine("Expected 1 argument.\nallocate [number]");
+            return;
+        }
+
+        float numberInput = 0;
+        if (float.TryParse(args[0], out numberInput))
+        {
+            if (IsTaskActive("allocate"))
+            {
+                if (numberInput == memorynumber)
+                {
+                    appendLogLine("hashing complete!\n" + numberInput.ToString() + " successfully allocated!");
+                    CompleteTask();
+                }
+                else
+                {
+                    appendLogLine(numberInput.ToString() + " not found. cannot allocate." + memoryHash);
+                }
+            }
+            else
+            {
+                appendLogLine("memory is not corrupted.");
+            }
+
+        }
+        else
+        {
+            appendLogLine(args[0] + " is not a number.");
+        }
+    }
+
+        void LogTemp() {
+        appendLogLine("energy core temperature: " + coreTemp.ToString() + "\nrecommended temperature: 1000");
     }
 
 	void hide(string[] args) {
@@ -263,29 +427,6 @@ public class ConsoleController{
 			break;
 		}
 	}
-	public void sendTask (){
-		if (successful){
-			//random task
-			successful = false;
-		}
-
-	}
-
-	void task1 (){
-		appendLogLine("Task 1");
-		appendLogLine ("ajskdhladhhlaksd");
-	}
-	void task2 (){
-		appendLogLine("Task 2");
-		appendLogLine ("ajskdhladhhlaksd");
-	}
-	void task3 (){
-		appendLogLine("Task 3");
-		appendLogLine ("ajskdhladhhlaksd");
-	}
-	/*void reload(string[] args) {
-		SceneManager.LoadLevel(Application.loadedLevel);
-	}*/
 
 	void resetPrefs(string[] args) {
 		PlayerPrefs.DeleteAll();

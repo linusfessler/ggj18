@@ -41,10 +41,9 @@
 			
 			float2 Distort(float2 p)
 			{
-				p*=1.01;
 				float theta  = atan2(p.y, p.x);
 				float radius = length(p);
-				radius = pow(radius, 1.3);
+				radius = pow(radius, 1.05);
 				p.x = radius * cos(theta);
 				p.y = radius * sin(theta);
 				return 0.5f * (p + 1);

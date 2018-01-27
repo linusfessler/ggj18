@@ -203,15 +203,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 110194262}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b0255694cde7554e97817459efb6c17, type: 3}
+  m_Script: {fileID: 11500000, guid: 631975aa82274f343983366221058330, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  intensity: 0.507
-  ColorShift: {fileID: 0}
-  BlockDistort: {fileID: 0}
+  intensity: 0.9
   CrtLines: {fileID: 2100000, guid: 882e674c0a7bb1e4b85888560550acb5, type: 2}
   Noise: {fileID: 2100000, guid: c3dd5f4e0a073e84ea20d7c426aa4106, type: 2}
-  BlackOut: {fileID: 0}
+  BarrelDistort: {fileID: 2100000, guid: aeeee6ff972bc974d81b493116d36f12, type: 2}
 --- !u!1 &187795126
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,7 +331,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: d16492a3cb000c5419ab6f194e6391cc, type: 3}
-    m_FontSize: 16
+    m_FontSize: 12
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -895,12 +893,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b0255694cde7554e97817459efb6c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  intensity: 0.522
-  ColorShift: {fileID: 2100000, guid: 7923cac291799e84bb96cee8f24abe29, type: 2}
-  BlockDistort: {fileID: 2100000, guid: c8fca749adac2f34dadec4bfbf0d0c2b, type: 2}
-  CrtLines: {fileID: 2100000, guid: 882e674c0a7bb1e4b85888560550acb5, type: 2}
-  Noise: {fileID: 2100000, guid: c3dd5f4e0a073e84ea20d7c426aa4106, type: 2}
-  BlackOut: {fileID: 2100000, guid: 2dd8ee3324bb4fc4e93709e9aa224374, type: 2}
 --- !u!1 &1781676711
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,7 +1071,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: d16492a3cb000c5419ab6f194e6391cc, type: 3}
-    m_FontSize: 16
+    m_FontSize: 12
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1

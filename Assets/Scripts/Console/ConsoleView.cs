@@ -29,6 +29,7 @@ public class ConsoleView : MonoBehaviour {
 	void Update() {
         //activate input field
         inputField.ActivateInputField();
+        console.CheckTask();
     }
 
 	void onLogChanged(string[] newLog) {
