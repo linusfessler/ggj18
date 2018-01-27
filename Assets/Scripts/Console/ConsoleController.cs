@@ -49,6 +49,7 @@ public class ConsoleController{
     public float firmwareVersion = 1.3f;
     public string instableAxis = "Z";
     public int coreTemp = 90;
+	public bool successful = false;
 
 	public string[] log { get; private set; } //Copy of scrollback as an array for easier use by ConsoleView
 
@@ -56,14 +57,14 @@ public class ConsoleController{
 
 	public ConsoleController() {
         //When adding commands, you must add a call below to registerCommand() with its name, implementation method, and help text.
-        registerCommand("help", help, "Print this help.");
-        registerCommand("update", updateFirmware, "\nupdate [version number] \nupdates current  firmware.\n");
-		registerCommand("calibrate", calibrateSender, "\ncalibrate [axis]\nrecalibrates rotation of transmission satellite.\n");
-		registerCommand("energy", adjustEnergy,"\nenergy [operation] [amount].");
-		registerCommand("hide", hide, "Hide the console.");
+		registerCommand("help", help, "\ntype 'help' for command list.\n");
+		registerCommand("update", updateFirmware, "\ntype 'update [version number]' \nto update current  firmware.\n");
+		registerCommand("calibrate", calibrateSender, "\ntype 'calibrate [axis]'\nto recalibrate rotation of transmission satellite.\n");
+		registerCommand("energy", adjustEnergy,"\ntype 'energy [operation] [amount]'\nto adjust energy temperature.\n");
+		/*registerCommand("hide", hide, "Hide the console.");
 		registerCommand(repeatCmdName, repeatCommand, "Repeat last command.");
 		registerCommand("reload", reload, "Reload game.");
-		registerCommand("resetprefs", resetPrefs, "Reset & saves PlayerPrefs.");
+		registerCommand("resetprefs", resetPrefs, "Reset & saves PlayerPrefs.");*/
 	}
 
 	void registerCommand(string command, CommandHandler handler, string help) {
@@ -106,7 +107,7 @@ public class ConsoleController{
 	public void runCommand(string command, string[] args) {
 		CommandRegistration reg = null;
 		if (!commands.TryGetValue(command, out reg)) {
-			appendLogLine(string.Format("Unknown command '{0}', type 'help' for list.", command));
+			appendLogLine(string.Format("Unknown command '{0}'.\ntype 'help' for list.", command));
 		}  else {
 			if (reg.handler == null) {
 				appendLogLine(string.Format("Unable to process command '{0}', handler was null.", command));
@@ -165,7 +166,8 @@ public class ConsoleController{
         {
             if (firmwareInput > firmwareVersion)
             {
-                appendLogLine("firmware update to version " + firmwareInput.ToString() + " succesful");
+				appendLogLine ("firmware update to version " + firmwareInput.ToString () + " successful.");
+				successful = true;
             }
             else {
                 appendLogLine("version " + firmwareInput.ToString() + " outdated. cannot downgrade.");
@@ -174,7 +176,7 @@ public class ConsoleController{
         }
         else
         {
-            appendLogLine(args[0]  + " is not a valid firmware");
+            appendLogLine(args[0]  + " is not a valid firmware.");
         }
 	}
 
@@ -189,7 +191,7 @@ public class ConsoleController{
         {
             if (inputaxis.ToUpper() == instableAxis.ToUpper())
             {
-                appendLogLine(inputaxis + " axis sucessfully recalibrated");
+                appendLogLine(inputaxis + " axis sucessfully recalibrated.");
             }
             else
             {
@@ -220,7 +222,7 @@ public class ConsoleController{
 
                 if (coreTemp + amount * i == 100)
                 {
-                    appendLogLine("energy succesfully adjusted.");
+                    appendLogLine("energy successfully adjusted.");
                 }
                 else {
                     LogTemp();
@@ -261,10 +263,29 @@ public class ConsoleController{
 			break;
 		}
 	}
+	public void sendTask (){
+		if (successful){
+			//random task
+			successful = false;
+		}
 
-	void reload(string[] args) {
-		Application.LoadLevel(Application.loadedLevel);
 	}
+
+	void task1 (){
+		appendLogLine("Task 1");
+		appendLogLine ("ajskdhladhhlaksd");
+	}
+	void task2 (){
+		appendLogLine("Task 2");
+		appendLogLine ("ajskdhladhhlaksd");
+	}
+	void task3 (){
+		appendLogLine("Task 3");
+		appendLogLine ("ajskdhladhhlaksd");
+	}
+	/*void reload(string[] args) {
+		SceneManager.LoadLevel(Application.loadedLevel);
+	}*/
 
 	void resetPrefs(string[] args) {
 		PlayerPrefs.DeleteAll();
