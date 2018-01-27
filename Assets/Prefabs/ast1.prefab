@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33786419187143640}
   - component: {fileID: 23592711125362650}
   - component: {fileID: 95917677098626814}
+  - component: {fileID: 136229035122426692}
   m_Layer: 0
   m_Name: ast1
   m_TagString: Untagged
@@ -35,13 +36,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1021972322769992}
-  m_LocalRotation: {x: 0.6720876, y: 0.4322008, z: 0.52235067, w: 0.2977424}
-  m_LocalPosition: {x: -21.743874, y: 9.292609, z: 29.943098}
-  m_LocalScale: {x: 6.547926, y: 6.5479193, z: 6.5479193}
+  m_LocalRotation: {x: 0.6434318, y: 0.49339867, z: 0.38494697, w: 0.44087327}
+  m_LocalPosition: {x: -21.314, y: 9.9659, z: 28.661}
+  m_LocalScale: {x: 6.710681, y: 6.710675, z: 6.710675}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 182.941, y: 646.103, z: -783.276}
+  m_LocalEulerAnglesHint: {x: 169.194, y: 648.698, z: -802.726}
 --- !u!23 &23592711125362650
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -98,3 +99,16 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!136 &136229035122426692
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1021972322769992}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1.15
+  m_Height: 2.97
+  m_Direction: 0
+  m_Center: {x: -0.54000145, y: 0.19, z: 0.32389662}
