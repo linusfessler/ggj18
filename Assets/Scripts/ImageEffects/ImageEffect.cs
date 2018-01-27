@@ -11,7 +11,7 @@ public class ImageEffect : MonoBehaviour {
     public Material CrtLines;
     public Material Noise;
     public Material BlackOut;
-    public Material BarrelDistort;
+    //public Material BarrelDistort;
 
     private float lastFlickerTime;
     private float flickerDuration = 0.11f;
@@ -27,8 +27,8 @@ public class ImageEffect : MonoBehaviour {
         Graphics.Blit(tempTex1, tempTex2, BlockDistort);
         Graphics.Blit(tempTex2, tempTex1, BlackOut);
         Graphics.Blit(tempTex1, tempTex2, CrtLines);
-        Graphics.Blit(tempTex2, tempTex1, Noise);
-        Graphics.Blit(tempTex1, dst, BarrelDistort);
+        //Graphics.Blit(tempTex2, tempTex1, Noise);
+		Graphics.Blit(tempTex2, dst, Noise);
     }
 
     private void Start()

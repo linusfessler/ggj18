@@ -80,9 +80,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b15fb9c3230fa6e43956163c3138febc, type: 3}
+  m_audioClip: {fileID: 8300000, guid: a655fb56091c98d4fbdff4fde9e2c00d, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -120,7 +120,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -162,8 +162,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 766d510a06bab1941be38b14cf4ae4fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 100
-  explosionScale: 0.25
+  speed: 400
+  explosionScale: 1
   vibrationIntensity: 1
   vibrationDuration: 0.1
 --- !u!120 &120586610804236374
