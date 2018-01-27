@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Asteroid : MonoBehaviour {
 
-	const float gravity = 0.01f;
+	const float gravity = 0.1f;
 
 	void Start() {
 		
@@ -14,10 +14,17 @@ public class Asteroid : MonoBehaviour {
 		
 	}
 
-	void OnTriggerStay(Collider collider) {
-		Movement movement = collider.GetComponent<Movement>();
+	/*void OnTriggerStay(Collider collider) {
+		Movement movement = collider.GetComponentInChildren<Movement>();
 		if (movement) {
 			movement.AddVelocity(gravity * (transform.position - collider.transform.position));
+		}
+	}*/
+
+	void OnCollisionEnter(Collision collision) {
+		Explosion explosion = GetComponent<Collider>().GetComponent<Explosion>();
+		if (explosion) {
+			explosion.enabled = true;
 		}
 	}
 }
