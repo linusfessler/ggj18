@@ -20,6 +20,8 @@ public class ImageEffect : MonoBehaviour {
     private RenderTexture tempTex1;
     private RenderTexture tempTex2;
 
+    private float connectionModifier = 0;
+
     private void OnRenderImage(RenderTexture src, RenderTexture dst)
     {
         tempTex1 = src;
@@ -43,7 +45,8 @@ public class ImageEffect : MonoBehaviour {
 
     private void Update()
     {
-            UpdateIntensity();
+        UpdateConnection();
+        UpdateIntensity();
     }
 
     private void UpdateIntensity() {
@@ -66,4 +69,32 @@ public class ImageEffect : MonoBehaviour {
             BlockDistort.SetFloat("_Intensity", 0f);
         } 
     }
+
+
+    #region Connection modification
+    private void UpdateConnection() {
+        intensity += connectionModifier * Time.deltaTime;
+    }
+
+    public void IncreaseConnectionBrust(float amount) {
+        intensity -= amount;
+        if (intensity < 0) intensity = 0;
+    }
+    public void DecreaseConnectionBrust(float amount)
+    {
+        intensity += amount;
+        if (intensity > 1) intensity = 0;
+    }
+    public void IncreaseConnection(float stabilityPerSecond) {
+        connectionModifier = -stabilityPerSecond;
+    }
+
+    public void DecreaseConnection(float stabilityPerSecond)
+    {
+        connectionModifier = stabilityPerSecond;
+    }
+    public void StabilizeConnection() {
+        connectionModifier = 0f;
+    }
+    #endregion
 }
