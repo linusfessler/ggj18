@@ -44,11 +44,9 @@ public class Obstacles : MonoBehaviour {
 		rigidbody.velocity = Random.value * maxSpeed * targetDirection;
 		rigidbody.angularVelocity = 2 * Random.value * new Vector3 (Random.Range (-1f, 1f), Random.Range (-1f, 1f), Random.Range (-1f, 1f)).normalized;
 		obstacles.Add(obstacle.GetComponent<Obstacle>());
-		StartCoroutine(obstacle.GetComponent<Obstacle>().PopUp());
 	}
 
 	public void RemoveObstacle(Obstacle obstacle) {
-		obstacle.StopAllCoroutines();
 		obstacles.Remove(obstacle);
 		Destroy(obstacle.gameObject);
 		SpawnObstacle();

@@ -30,6 +30,8 @@ public class Obstacle : MonoBehaviour {
 		color.b += Random.Range(-0.5f, 0.5f);
 		copy.color = color.ToColor();
 		renderer.material = copy;
+
+		StartCoroutine(PopUp());
 	}
 
 	void Update() {
@@ -39,6 +41,10 @@ public class Obstacle : MonoBehaviour {
 		if (rigidbody.velocity.magnitude > obstacles.maxSpeed) {
 			rigidbody.velocity = obstacles.maxSpeed * rigidbody.velocity.normalized;
 		}
+	}
+
+	void OnDestroy() {
+		StopAllCoroutines();
 	}
 
 	public void Damage() {
