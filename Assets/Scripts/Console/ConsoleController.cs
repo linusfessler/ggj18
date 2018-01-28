@@ -318,6 +318,11 @@ public class ConsoleController{
         float firmwareInput = 0;
         if (float.TryParse(args[0], out firmwareInput))
         {
+            if (!loggedIn)
+            {
+                appendLogLine("<color=red>Error #FAx075783</color>\naccess denied.\nlog in to access command");
+                return;
+            }
             if (!alive)
             {
                 appendLogLine("<color=red>Error #B2x002783</color>\nConnection Timed Out");
@@ -359,6 +364,11 @@ public class ConsoleController{
         {
             if (IsTaskActive("calibrate"))
             {
+                if (!loggedIn)
+                {
+                    appendLogLine("<color=red>Error #FAx075783</color>\naccess denied.\nlog in to access command");
+                    return;
+                }
                 if (!alive)
                 {
                     appendLogLine("<color=red>Error #B2x002783</color>\nConnection Timed Out");
@@ -399,6 +409,11 @@ public class ConsoleController{
             int amount;
             if (int.TryParse(args[1], out amount))
             {
+                if (!loggedIn)
+                {
+                    appendLogLine("<color=red>Error #FAx075783</color>\naccess denied.\nlog in to access command");
+                    return;
+                }
                 if (!alive)
                 {
                     appendLogLine("<color=red>Error #B2x002783</color>\nConnection Timed Out");
@@ -450,6 +465,11 @@ public class ConsoleController{
         float numberInput = 0;
         if (float.TryParse(args[0], out numberInput))
         {
+            if (!loggedIn)
+            {
+                appendLogLine("<color=red>Error #FAx075783</color>\naccess denied.\nlog in to access command");
+                return;
+            }
             if (!alive)
             {
                 appendLogLine("<color=red>Error #B2x002783</color>\nConnection Timed Out");
@@ -503,6 +523,7 @@ public class ConsoleController{
         this.username = username;
         string loading = "\n.                            \n.                            \n.                            \n.                            \n";
         appendLogLine("\nconnecting . . ." + loading + "\nlogging in . . ." + loading + "succesfully logged in as:\n<color=red>" + this.username + "</color>");
+        GameObject.Find("Game").GetComponent<Game>().Connect();
     }
 
     void LogTemp() {

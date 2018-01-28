@@ -51,7 +51,7 @@ public class ConsoleView : MonoBehaviour {
 		if (Input.GetButtonDown("Submit")) {
 			runCommand ();
 		}
-        if (gameCam.GetComponent<ImageEffect>().intensity >= 0.99 && console.alive) {
+        if (gameCam.GetComponent<ImageEffect>().intensity >= 0.99 && console.alive && console.loggedIn) {
             console.Die(GetComponentInChildren<Timer>());
         }
         console.UpdateLog();
