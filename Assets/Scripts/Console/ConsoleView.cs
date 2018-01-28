@@ -35,6 +35,7 @@ public class ConsoleView : MonoBehaviour {
         console.AssignConsoleView(this);
 		audioSource = GetComponent<AudioSource> ();
         siren = transform.Find("Alarm").GetComponent<AudioSource>();
+        console.Start();
 	}
 
 	~ConsoleView() {
@@ -44,7 +45,9 @@ public class ConsoleView : MonoBehaviour {
 	void Update() {
         //activate input field
         inputField.ActivateInputField();
-        console.CheckTask();
+        if (console.loggedIn){
+            console.CheckTask();
+        }
 		if (Input.GetButtonDown("Submit")) {
 			runCommand ();
 		}

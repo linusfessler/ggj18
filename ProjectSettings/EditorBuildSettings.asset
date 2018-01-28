@@ -9,5 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/StartScreen.unity
     guid: de166134c269de94e9c5b0adb41fb7aa
   - enabled: 1
-    path: Assets/Scenes/Linus.unity
+    path: Assets/Scenes/Game.unity
     guid: 30e2f841cc2e03745b970788b6f3c9b0
+  - enabled: 1
+    path: Assets/Scenes/ScoreBoard.unity
+    guid: e984a1bea8eca81409c75ff39a1d3219
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: c23e6febd9c42eb4880fbd9f07099a66

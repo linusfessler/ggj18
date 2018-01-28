@@ -17,7 +17,7 @@ public class ScoreBoardConsole : MonoBehaviour {
     {
         startext = textField.text;
         textField.text = "";
-        inputField.caretWidth = 8;
+        inputField.caretWidth = 12;
 
         //get scorebord text
         scorebordText = Highscores.AsString();

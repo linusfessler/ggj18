@@ -26,11 +26,7 @@ public class Timer : MonoBehaviour {
 	}
 
 	public string asString() {
-		TimeSpan t = TimeSpan.FromSeconds(seconds);
-		return string.Format("<color=red>{0:D2}:{1:D2}.{2:D3}</color>", 
-			t.Minutes, 
-			t.Seconds, 
-			t.Milliseconds);
+        return Highscores.Format(seconds);
 	}
 
 	public void Stop() {

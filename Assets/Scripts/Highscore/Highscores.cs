@@ -45,8 +45,16 @@ public static class Highscores {
 	public static string AsString() {
 		string result = "";
 		for (int i = 0; i < List.Count; i++) {
-			result += (i+1) + " " + List[i].name + " " + List[i].score + "\n";
+			result += (i+1) + " " + List[i].name + " " + Format(List[i].score) + "\n";
 		}
 		return result;
 	}
+
+    public static string Format(float score) {
+        TimeSpan t = TimeSpan.FromSeconds(score);
+        return string.Format("<color=red>{0:D2}:{1:D2}.{2:D3}</color>",
+            t.Minutes,
+            t.Seconds,
+            t.Milliseconds);
+    }
 }

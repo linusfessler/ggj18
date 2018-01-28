@@ -55,8 +55,10 @@ public class ConsoleController{
     public int coreTemp = 90;
     public int memorynumber;
     public string memoryHash;
+    public bool loggedIn = false;
     public bool alive = true;
 
+    private string username = "";
     private bool taskCompleted = true;
     private string activeTask = "";
     private float nextTaskTime = 0f;
@@ -73,14 +75,15 @@ public class ConsoleController{
 	public ConsoleController() {
         //When adding commands, you must add a call below to registerCommand() with its name, implementation method, and help text.
 		registerCommand("help", help, "\ntype 'help' for command list.\n");
-		registerCommand("update", updateFirmware, "\ntype 'update [version number]' \nto update current  firmware.\n");
+        registerCommand("login", login, "\ntype 'login [username] [password]'\nto log in.\n");
+        registerCommand("update", updateFirmware, "\ntype 'update [version number]' \nto update current  firmware.\n");
 		registerCommand("calibrate", calibrateSender, "\ntype 'calibrate [axis]'\nto recalibrate rotation of transmission satellite.\n");
 		registerCommand("energy", adjustEnergy,"\ntype 'energy [operation] [amount]'\nto adjust energy temperature.\n");
 		registerCommand("allocate", allocate, "\ntype 'allocate [number]'\nallocates number from fragmented memory.\n");
-		registerCommand("exit", exit, "go to main menu");
-		/*registerCommand("reload", reload, "Reload game.");
+        registerCommand("exit", exit, "\ntype 'exit'\nto return to main menu.\n");
+        /*registerCommand("reload", reload, "Reload game.");
 		registerCommand("resetprefs", resetPrefs, "Reset & saves PlayerPrefs.");*/
-	}
+    }
 
 	void registerCommand(string command, CommandHandler handler, string help) {
 		commands.Add(command, new CommandRegistration(command, handler, help));
@@ -482,6 +485,26 @@ public class ConsoleController{
         SceneManager.LoadScene(0);
     }
 
+    void login(string[] args) {
+        if (args.Length < 2)
+        {
+            appendLogLine("Expected 2 arguments.\nlogin [username] [password]");
+            return;
+        }
+
+        string username = args[0];
+        if (loggedIn)
+        {
+            appendLogLine("already logged in as " + this.username);
+            return;
+        }
+        //log in
+        loggedIn = true;
+        this.username = username;
+        string loading = "\n.                            \n.                            \n.                            \n.                            \n";
+        appendLogLine("\nconnecting . . ." + loading + "\nlogging in . . ." + loading + "succesfully logged in as:\n<color=red>" + this.username + "</color>");
+    }
+
     void LogTemp() {
         appendLogLine("energy core temperature: " + coreTemp.ToString() + "\nrecommended temperature: 1000");
     }
@@ -514,9 +537,12 @@ public class ConsoleController{
 
 	public void Die(Timer timer) {
 		timer.Stop();
-		Highscores.Add("Linus", timer.seconds);
-		Debug.Log(Highscores.AsString());
+		Highscores.Add(this.username, timer.seconds);
         alive = false;
 		appendLogLine("\n<color=red>Connection timed out!</color>\nConnection time: " + timer.asString());
+    }
+
+    public void Start() {
+        appendLogLine("pls log in\ntype 'login [username] [password]");
     }
 }
