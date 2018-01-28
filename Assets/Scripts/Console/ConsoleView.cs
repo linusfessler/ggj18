@@ -49,7 +49,7 @@ public class ConsoleView : MonoBehaviour {
 			runCommand ();
 		}
         if (gameCam.GetComponent<ImageEffect>().intensity >= 0.99 && console.alive) {
-            console.Die(TimeSpan.FromSeconds(GetComponentInChildren<Timer>().seconds));
+            console.Die(GetComponentInChildren<Timer>());
         }
         console.UpdateLog();
         float intensity = Camera.main.GetComponent<ImageEffect>().intensity;
@@ -94,7 +94,6 @@ public class ConsoleView : MonoBehaviour {
 	}
 
 	private void PlaySound( AudioSource source, AudioClip[] soundArray){
-        print("feeding");
         source.Stop ();
         source.clip = soundArray [UnityEngine.Random.Range(0, soundArray.Length)];
         source.Play ();
