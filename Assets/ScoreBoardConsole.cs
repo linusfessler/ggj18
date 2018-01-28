@@ -20,11 +20,11 @@ public class ScoreBoardConsole : MonoBehaviour {
         inputField.caretWidth = 8;
 
         //get scorebord text
-
+        scorebordText = Highscores.AsString();
 
         //combine texts
 
-        text = startext + scorebordText + exitText;
+        text = startext + "\n\n"  + scorebordText + exitText;
     }
     private void Update()
     {
