@@ -13,7 +13,12 @@ public class Game : MonoBehaviour {
 		Camera.main.GetComponent<ImageEffect>().intensity = 1;
 	}
 
-	public void Connect() {
+	public void Connect(float seconds) {
+		StartCoroutine(ConnectAfterSeconds(seconds));
+	}
+
+	IEnumerator ConnectAfterSeconds(float seconds) {
+		yield return new WaitForSeconds(seconds);
 		ship.SetActive(true);
 		asteroids.SetActive(true);
 		Camera.main.GetComponent<ImageEffect>().intensity = 0;
