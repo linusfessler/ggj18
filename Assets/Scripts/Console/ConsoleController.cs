@@ -63,7 +63,7 @@ public class ConsoleController{
 
     private ConsoleView consoleView;
 	private ImageEffect glitchEffect;
-	private float glitchRate = 0.02f;
+	private float glitchRate = 0.005f;
     
 
 	public string[] log { get; private set; } //Copy of scrollback as an array for easier use by ConsoleView
@@ -192,7 +192,7 @@ public class ConsoleController{
 
     private void CreatenewTask() {
 		glitchEffect.DecreaseConnection (glitchRate);
-		glitchRate += 0.005f;
+		glitchRate += 0.0005f;
         int taskid = UnityEngine.Random.Range(0, 4);
         switch (taskid) {
             case 0:
