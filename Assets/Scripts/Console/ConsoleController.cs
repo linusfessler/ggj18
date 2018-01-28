@@ -523,7 +523,7 @@ public class ConsoleController{
         this.username = username;
         string loading = "\n.                            \n.                            \n.                            \n.                            \n";
         appendLogLine("\nconnecting . . ." + loading + "\nlogging in . . ." + loading + "succesfully logged in as:\n<color=red>" + this.username + "</color>");
-        GameObject.Find("Game").GetComponent<Game>().Connect();
+        GameObject.Find("Game").GetComponent<Game>().Connect(3f);
     }
 
     void LogTemp() {
