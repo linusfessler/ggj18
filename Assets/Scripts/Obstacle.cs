@@ -7,6 +7,7 @@ public class Obstacle : MonoBehaviour {
 	[SerializeField] float vibrationIntensity = 1f;
 	[SerializeField] float vibrationDuration = 0.25f;
 	[SerializeField] Vector2 scaleRange = new Vector2(10, 100);
+	[SerializeField] float maxAngularVelocity = 0.5f;
 
 	float explosionScale;
 	int health;
@@ -40,6 +41,10 @@ public class Obstacle : MonoBehaviour {
 		}
 		if (rigidbody.velocity.magnitude > obstacles.maxSpeed) {
 			rigidbody.velocity = obstacles.maxSpeed * rigidbody.velocity.normalized;
+		}
+
+		if (rigidbody.angularVelocity.magnitude > maxAngularVelocity) {
+			rigidbody.angularVelocity = maxAngularVelocity * rigidbody.angularVelocity.normalized;
 		}
 	}
 
