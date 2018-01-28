@@ -7,6 +7,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine.SceneManagement;
 
 public delegate void CommandHandler(string[] args);
 
@@ -76,8 +77,8 @@ public class ConsoleController{
 		registerCommand("calibrate", calibrateSender, "\ntype 'calibrate [axis]'\nto recalibrate rotation of transmission satellite.\n");
 		registerCommand("energy", adjustEnergy,"\ntype 'energy [operation] [amount]'\nto adjust energy temperature.\n");
 		registerCommand("allocate", allocate, "\ntype 'allocate [number]'\nallocates number from fragmented memory.\n");
-		/*registerCommand(repeatCmdName, repeatCommand, "Repeat last command.");
-		registerCommand("reload", reload, "Reload game.");
+		registerCommand("exit", exit, "go to main menu");
+		/*registerCommand("reload", reload, "Reload game.");
 		registerCommand("resetprefs", resetPrefs, "Reset & saves PlayerPrefs.");*/
 	}
 
@@ -476,7 +477,12 @@ public class ConsoleController{
         }
     }
 
-        void LogTemp() {
+    void exit(string[] args)
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    void LogTemp() {
         appendLogLine("energy core temperature: " + coreTemp.ToString() + "\nrecommended temperature: 1000");
     }
 
