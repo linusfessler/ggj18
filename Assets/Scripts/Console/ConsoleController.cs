@@ -502,11 +502,6 @@ public class ConsoleController{
 			break;
 		}
 	}
-
-	void resetPrefs(string[] args) {
-		PlayerPrefs.DeleteAll();
-		PlayerPrefs.Save();
-	}
     #endregion
 
 	public void AssignImageEffect(ImageEffect effect){
@@ -517,12 +512,11 @@ public class ConsoleController{
         consoleView = cv;
     }
 
-    public void Die(TimeSpan connectionTime) {
-        string t = string.Format("{0:D2}:{1:D2}:{2:D3}",
-            connectionTime.Minutes,
-            connectionTime.Seconds,
-            connectionTime.Milliseconds);
+	public void Die(Timer timer) {
+		timer.Stop();
+		Highscores.Add("Linus", timer.seconds);
+		Debug.Log(Highscores.AsString());
         alive = false;
-        appendLogLine("\n<color=red>Connection timed out!</color>\nconnection Time: " + t);
+		appendLogLine("\n<color=red>Connection timed out!</color>\nConnection time: " + timer.asString());
     }
 }

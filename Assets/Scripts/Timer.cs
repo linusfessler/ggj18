@@ -8,17 +8,32 @@ public class Timer : MonoBehaviour {
 
 	public float seconds = 0;
 	Text text;
+	bool stopped;
 
 	void Start() {
 		text = GetComponent<Text>();
 	}
+
+	void OnEnable() {
+		stopped = false;
+	}
 	
 	void Update() {
-		seconds += Time.deltaTime;
+		if (!stopped) {
+			seconds += Time.deltaTime;
+			text.text = asString ();
+		}
+	}
+
+	public string asString() {
 		TimeSpan t = TimeSpan.FromSeconds(seconds);
-		text.text = string.Format("<color=red>{0:D2}:{1:D2}.{2:D3}</color>", 
+		return string.Format("<color=red>{0:D2}:{1:D2}.{2:D3}</color>", 
 			t.Minutes, 
 			t.Seconds, 
 			t.Milliseconds);
+	}
+
+	public void Stop() {
+		stopped = true;
 	}
 }
