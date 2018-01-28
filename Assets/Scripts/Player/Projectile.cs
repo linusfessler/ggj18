@@ -8,10 +8,15 @@ public class Projectile : MonoBehaviour {
 	[SerializeField] float explosionScale = 0.5f;
 	[SerializeField] float vibrationIntensity = 1f;
 	[SerializeField] float vibrationDuration = 0.1f;
+    [SerializeField] AudioClip[] laserSound;
 
-	void Start() {
+    void Start() {
 		StartCoroutine(AutoDestroy());
-	}
+        //chose random sound
+        GetComponent<AudioSource>().clip = laserSound[Random.Range(0, laserSound.Length)];
+        GetComponent<AudioSource>().Play();
+
+    }
 
 	void OnCollisionEnter(Collision collision) {
 		Obstacle obstacle = collision.gameObject.GetComponent<Obstacle>();

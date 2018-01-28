@@ -2,6 +2,7 @@
 /// Marshals events and data between ConsoleController and uGUI.
 /// Copyright (c) 2014-2015 Eliot Lash
 /// </summary>
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Text;
@@ -22,6 +23,7 @@ public class ConsoleView : MonoBehaviour {
 	public AudioClip[] warningSound;
 
 	private AudioSource audioSource;
+    private AudioSource siren;
 
 	void Start() {
 		if (console != null) {
@@ -30,7 +32,9 @@ public class ConsoleView : MonoBehaviour {
 		updateLogStr(console.log);
         inputField.caretWidth = 10;
 		console.AssignImageEffect(gameCam.GetComponent<ImageEffect> ());
+        console.AssignConsoleView(this);
 		audioSource = GetComponent<AudioSource> ();
+        siren = transform.Find("Alarm").GetComponent<AudioSource>();
 	}
 
 	~ConsoleView() {
@@ -44,17 +48,23 @@ public class ConsoleView : MonoBehaviour {
 		if (Input.GetButtonDown("Submit")) {
 			runCommand ();
 		}
+        if (gameCam.GetComponent<ImageEffect>().intensity >= 0.99 && console.alive) {
+            console.Die(TimeSpan.FromSeconds(GetComponentInChildren<Timer>().seconds));
+        }
+        console.UpdateLog();
+        float intensity = Camera.main.GetComponent<ImageEffect>().intensity;
+        float volume;
     }
 
 	void onLogChanged(string[] newLog) {
-		updateLogStr(newLog);
+        updateLogStr(newLog);
 	}
 
 	void updateLogStr(string[] newLog) {
 		if (newLog == null) {
 			logTextArea.text = "";
 		}  else {
-			logTextArea.text = string.Join("\n", newLog);
+            logTextArea.text = string.Join("\n", newLog);
 		}
 	}
 
@@ -62,30 +72,32 @@ public class ConsoleView : MonoBehaviour {
 	/// Event that should be called by anything wanting to submit the current input to the console.
 	/// </summary>
 	public void runCommand() {
-		console.runCommandString (inputField.text);
-		inputField.text = "";
-		PlayFeed ();
+            console.runCommandString(inputField.text);
+            inputField.text = "";
 	}
 
 	public void PlayClick(){
-		PlaySound (clickSound);
+		PlaySound (audioSource, clickSound);
 	}
 
 	public void PlayFeed(){
-		PlaySound (feedSound);
+		PlaySound (audioSource, feedSound);
 	}
 	public void PlayWarning(){
-		PlaySound (warningSound);
+		PlaySound (siren, warningSound);
 	}
+    public void StopWarning() {
+        siren.Stop();
+    }
 	public void PlayError(){
-		PlaySound (errorSound);
+		PlaySound (audioSource, errorSound);
 	}
 
-	private void PlaySound(AudioClip[] soundArray){
-		audioSource.Stop ();
-		audioSource.clip = soundArray [Random.Range (0, soundArray.Length)];
-		audioSource.loop = false;
-		audioSource.Play ();
+	private void PlaySound( AudioSource source, AudioClip[] soundArray){
+        print("feeding");
+        source.Stop ();
+        source.clip = soundArray [UnityEngine.Random.Range(0, soundArray.Length)];
+        source.Play ();
 	}
 
 }

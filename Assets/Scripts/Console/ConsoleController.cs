@@ -43,6 +43,9 @@ public class ConsoleController{
 	const int scrollbackSize = 100;
 
 	Queue<string> scrollback = new Queue<string>(scrollbackSize);
+    Queue<string> notYetPrintedStrings = new Queue<string>(500);
+    string currentPrintingString = "";
+    Queue<Char> notYetPrintedChars = new Queue<char>(200);
 	List<string> commandHistory = new List<string>();
 	Dictionary<string, CommandRegistration> commands = new Dictionary<string, CommandRegistration>();
 
@@ -51,13 +54,16 @@ public class ConsoleController{
     public int coreTemp = 90;
     public int memorynumber;
     public string memoryHash;
+    public bool alive = true;
 
-	private bool taskCompleted = true;
+    private bool taskCompleted = true;
     private string activeTask = "";
     private float nextTaskTime = 0f;
 
+    private ConsoleView consoleView;
 	private ImageEffect glitchEffect;
 	private float glitchRate = 0.02f;
+    
 
 	public string[] log { get; private set; } //Copy of scrollback as an array for easier use by ConsoleView
 
@@ -69,7 +75,7 @@ public class ConsoleController{
 		registerCommand("update", updateFirmware, "\ntype 'update [version number]' \nto update current  firmware.\n");
 		registerCommand("calibrate", calibrateSender, "\ntype 'calibrate [axis]'\nto recalibrate rotation of transmission satellite.\n");
 		registerCommand("energy", adjustEnergy,"\ntype 'energy [operation] [amount]'\nto adjust energy temperature.\n");
-		registerCommand("allocate", allocate, "\nallocate number from fragmented memory.\n");
+		registerCommand("allocate", allocate, "\ntype 'allocate [number]'\nallocates number from fragmented memory.\n");
 		/*registerCommand(repeatCmdName, repeatCommand, "Repeat last command.");
 		registerCommand("reload", reload, "Reload game.");
 		registerCommand("resetprefs", resetPrefs, "Reset & saves PlayerPrefs.");*/
@@ -83,13 +89,43 @@ public class ConsoleController{
 		if (scrollback.Count >= ConsoleController.scrollbackSize) {
 			scrollback.Dequeue();
 		}
-		scrollback.Enqueue(line);
-
-		log = scrollback.ToArray();
-		if (logChanged != null) {
-			logChanged(log);
-		}
+		notYetPrintedStrings.Enqueue(line);
 	}
+
+    public void UpdateLog() {
+        for (int i = 0; i < 2; i++)
+        {
+            if (notYetPrintedStrings.Count != 0 || notYetPrintedChars.Count != 0)
+            {
+                if (notYetPrintedChars.Count > 0)
+                {
+                    //IF THERE ARE STILL CHARACTES TO BE PRINTED, APPEDN TEHM TO CURREN STRING
+                    currentPrintingString += notYetPrintedChars.Dequeue();
+                }
+                else
+                {
+                    //GET NEXT STRING FROM QUEUE
+                    scrollback.Enqueue(currentPrintingString);
+
+                    currentPrintingString = "";
+                    string nextString = notYetPrintedStrings.Dequeue();
+                    foreach (char character in nextString)
+                    {
+                        if (character == ' ' || character == '\n')
+                            consoleView.PlayFeed();
+                        notYetPrintedChars.Enqueue(character);
+                    }
+                }
+            }
+            log = new string[scrollback.ToArray().Length + 1];
+            scrollback.CopyTo(log, 0);
+            log[log.Length - 1] = currentPrintingString;
+            if (logChanged != null)
+            {
+                logChanged(log);
+            }
+        }
+    }
 
 	public void runCommandString(string commandString) {
         appendLogLine("\n...\n");
@@ -148,7 +184,7 @@ public class ConsoleController{
     #region task generation
 
     public void CheckTask() {
-        if (taskCompleted && Time.time > nextTaskTime) {
+        if (taskCompleted && Time.time > nextTaskTime && alive) {
             CreatenewTask();
         }
     }
@@ -187,6 +223,7 @@ public class ConsoleController{
     }
 
     #region individual tasks
+
     private void CreateUpdateTask() {
         appendLogLine("\n...\n\n<color=red>transmission protocol outdated!</color>\ncurrent firmware: " + firmwareVersion.ToString());
         activeTask = "update";
@@ -277,6 +314,11 @@ public class ConsoleController{
         float firmwareInput = 0;
         if (float.TryParse(args[0], out firmwareInput))
         {
+            if (!alive)
+            {
+                appendLogLine("<color=red>Error #B2x002783</color>\nConnection Timed Out");
+                return;
+            }
             if (IsTaskActive("update"))
             {
                 if (firmwareInput > firmwareVersion)
@@ -297,6 +339,7 @@ public class ConsoleController{
         }
         else
         {
+            consoleView.PlayError();
             appendLogLine(args[0]  + " is not a valid firmware.");
         }
 	}
@@ -307,12 +350,16 @@ public class ConsoleController{
             appendLogLine("Expected 1 argument.\ncalibrate [axis] (x, y, z)");
             return;
         }
-        string inputaxis = args[0];
+        string inputaxis = args[0].ToLower();
         if ((inputaxis == "x")|| (inputaxis == "y")|| (inputaxis == "z"))
         {
             if (IsTaskActive("calibrate"))
             {
-
+                if (!alive)
+                {
+                    appendLogLine("<color=red>Error #B2x002783</color>\nConnection Timed Out");
+                    return;
+                }
                 if (inputaxis.ToUpper() == instableAxis.ToUpper())
                 {
                     appendLogLine(inputaxis + " axis sucessfully recalibrated.");
@@ -330,6 +377,7 @@ public class ConsoleController{
         }
         else
         {
+            consoleView.PlayError();
             appendLogLine(args[0] + " is not a valid axis");
         }
     }
@@ -347,6 +395,11 @@ public class ConsoleController{
             int amount;
             if (int.TryParse(args[1], out amount))
             {
+                if (!alive)
+                {
+                    appendLogLine("<color=red>Error #B2x002783</color>\nConnection Timed Out");
+                    return;
+                }
                 if (IsTaskActive("energy"))
                 {
                     int i = operation == "dec" ? -1 : 1;
@@ -368,6 +421,7 @@ public class ConsoleController{
             }
             else
             {
+                consoleView.PlayError();
                 LogTemp();
                 appendLogLine(amount.ToString() + " is not a valid amount.");
             }
@@ -375,6 +429,7 @@ public class ConsoleController{
         }
         else
         {
+            consoleView.PlayError();
             LogTemp();
             appendLogLine(args[0] + " is not a valid command");
         }
@@ -391,6 +446,11 @@ public class ConsoleController{
         float numberInput = 0;
         if (float.TryParse(args[0], out numberInput))
         {
+            if (!alive)
+            {
+                appendLogLine("<color=red>Error #B2x002783</color>\nConnection Timed Out");
+                return;
+            }
             if (IsTaskActive("allocate"))
             {
                 if (numberInput == memorynumber)
@@ -411,7 +471,8 @@ public class ConsoleController{
         }
         else
         {
-            appendLogLine(args[0] + " is not a number.");
+            consoleView.PlayError();
+            appendLogLine(args[0] + " is not numeric.");
         }
     }
 
@@ -445,4 +506,17 @@ public class ConsoleController{
 	public void AssignImageEffect(ImageEffect effect){
 		glitchEffect = effect;
 	}
+
+    public void AssignConsoleView(ConsoleView cv) {
+        consoleView = cv;
+    }
+
+    public void Die(TimeSpan connectionTime) {
+        string t = string.Format("{0:D2}:{1:D2}:{2:D3}",
+            connectionTime.Minutes,
+            connectionTime.Seconds,
+            connectionTime.Milliseconds);
+        alive = false;
+        appendLogLine("\n<color=red>Connection timed out!</color>\nconnection Time: " + t);
+    }
 }

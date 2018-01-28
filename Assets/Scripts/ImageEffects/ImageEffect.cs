@@ -53,14 +53,14 @@ public class ImageEffect : MonoBehaviour {
         ColorShift.SetFloat("_Intensity", intensity * 0.05f);
         CrtLines.SetFloat("_Intensity", intensity);
         Noise.SetFloat("_Intensity", intensity * intensity * 0.7f);
-        BlackOut.SetFloat("_Intensity", intensity * intensity * 0.5f);
+        BlackOut.SetFloat("_Intensity", intensity >= 0.99f ? 0.6f :(intensity * intensity * 0.5f));
         if (Time.time > nextFlickerTime)
         {
             //start flicker
             lastFlickerTime = Time.time;
             BlockDistort.SetVector("_SampleOffset", new Vector4(Random.Range(0f, 1f), Random.Range(0f, 1f), 0f, 0f));
             BlockDistort.SetFloat("_Intensity", intensity * 0.2f);
-            nextFlickerTime = Time.time + Random.Range(0f, 1.3f - intensity);
+            nextFlickerTime = Time.time + Random.Range(0f, 1.01f - intensity);
         }
 
         if (Time.time - lastFlickerTime > flickerDuration)
